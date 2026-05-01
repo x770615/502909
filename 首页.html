@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN"> <!-- 改为中文编码更适配 -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url("0004.jpg") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .big-box {
+            width: 90%;
+            max-width: 900px;
+            background: transparent !important;
+            backdrop-filter: none !important;
+            box-shadow: none;
+            padding: 40px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        .square-btn {
+            width: 140px;
+            height: 140px;
+            border: none;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .square-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .square-btn:hover {
+            transform: scale(1.08);
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div class="big-box">
+    <button class="square-btn" style="background-image:url('04.jpg')" onclick="jump('')">
+        <span>我们俩🧑‍🤝‍🧑</span>
+    </button>
+    <button class="square-btn" style="background-image:url('05.jpg')" onclick="jump('生日祝福.html')">
+        <span>生日祝福🎂</span>
+    </button>
+    <button class="square-btn" style="background-image:url('07.jpg')" onclick="jump('')">
+        <span>信✉️</span>
+    </button>
+    <button class="square-btn" style="background-image:url('09.jpg')" onclick="jump('爱心墙.html')">
+        <span>爱心墙💕</span>
+    </button>
+</div>
+
+<script>
+    function jump(url) {
+        window.location.href = url;
+    }
+</script>
+
+</body>
+</html>

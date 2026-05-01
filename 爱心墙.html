@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心墙💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: url("08.jpg") no-repeat center center / cover;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .heart-item {
+            position: absolute;
+            width: 120px;
+            height: 60px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "微软雅黑", sans-serif;
+            font-size: 14px;
+            color: #333;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        .heart-item.active {
+            z-index: 999 !important;
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3) !important;
+            opacity: 1 !important;
+        }
+        .heart-center {
+            font-weight: bold;
+            font-size: 16px;
+            background: lightblue !important;
+            color: darkblue !important;
+            transform: scale(1.1);
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const tips = [
+            "要好好爱自己",
+            "今天也要开心",
+            "你真的超棒的",
+            "别太累啦",
+            "要按时吃饭",
+            "记得早点休息",
+            "你值得所有美好",
+            "今天也要元气满满",
+            "要照顾好自己",
+            "慢慢来没关系的",
+            "你已经很努力了",
+            "今天也要笑一笑",
+            "别给自己太大压力",
+            "你超可爱的",
+            "要好好睡觉呀",
+            "今天也要爱自己"
+        ];
+
+        const colors = ["pink", "lightpink", "lightblue", "lightgreen", "lemonchiffon", "hotpink", "palevioletred"];
+
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const centerX = screenWidth / 2;
+        const centerY = screenHeight / 2;
+
+        function getHeartPoints(n) {
+            const points = [];
+            for (let i = 0; i < n; i++) {
+                const theta = i * Math.PI * 2 / n;
+                const x = 16 * Math.pow(Math.sin(theta), 3);
+                const y = 13 * Math.cos(theta) - 5 * Math.cos(2*theta) - 2 * Math.cos(3*theta) - Math.cos(4*theta);
+                
+                const scale = Math.min(screenWidth, screenHeight) / 50;
+                const px = centerX + x * scale - 60;
+                const py = centerY - y * scale - 30;
+                
+                points.push({ x: px, y: py });
+            }
+            return points;
+        }
+
+        function createHeartItem(x, y, text, isCenter = false) {
+            const item = document.createElement('div');
+            item.className = `heart-item ${isCenter ? 'heart-center' : ''}`;
+            
+            const bgColor = colors[Math.floor(Math.random() * colors.length)];
+            item.style.background = bgColor;
+            item.style.left = `${x}px`;
+            item.style.top = `${y}px`;
+            item.textContent = text;
+            
+            document.body.appendChild(item);
+            
+           
+            item.addEventListener('mouseover', () => {
+                document.querySelectorAll('.heart-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+            });
+            item.addEventListener('mouseout', () => {
+                item.classList.remove('active');
+            });
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.heart-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+            });
+        }
+
+        function createHeartWall() {
+            const heartPoints = getHeartPoints(250);
+            
+            let index = 0;
+            const timer = setInterval(() => {
+                if (index >= heartPoints.length) {
+                    clearInterval(timer);
+                    return;
+                }
+                const point = heartPoints[index];
+                const text = tips[Math.floor(Math.random() * tips.length)];
+                createHeartItem(point.x, point.y, text);
+                index++;
+            }, 30);
+        }
+
+        createHeartWall();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.body.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

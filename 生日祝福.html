@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日祝福🎂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at top, #000000 0%, #000000 80%, #050a18 100%),
+                linear-gradient(to bottom, rgba(0, 10, 30, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(20, 40, 80, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 70% 80%, rgba(10, 30, 60, 0.05) 0%, transparent 50%);
+            animation: nebula-flow 80s linear infinite;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #d0e0ff;
+            opacity: 0.7;
+        }
+
+        .star.flash {
+            animation: star-flash 2s ease-in-out infinite;
+        }
+
+        @keyframes star-flash {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.9; }
+        }
+
+        @keyframes nebula-flow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20%, -10%) scale(1.05); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        .center-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-30%, -50%) rotate(10deg); 
+            font-style: italic;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.5vw;
+            font-weight: 300;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            z-index: 10;
+            line-height: 2.2;
+            white-space: normal;
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .char {
+            opacity: 0;
+            animation: char-fade-in 0.5s ease forwards;
+            display: inline-block;
+        }
+
+        @keyframes char-fade-in {
+            to { opacity: 1; }
+        }
+
+        .text-line {
+            width: 100%;
+            text-align: left;
+        }
+
+        .line-0 { padding-left: 0vw; }
+        .line-1 { padding-left: 4vw; }
+        .line-2 { padding-left: 8vw; }
+        .line-3 { padding-left: 12vw; }
+    </style>
+</head>
+<body>
+    <div class="nebula"></div>
+    <div class="stars" id="stars"></div>
+    <div class="center-text" id="textContainer"></div>
+
+    <script>
+        function createStar(index, total) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 1 + 0.2;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const posX = (index / total) * screenWidth + (Math.random() * 30 - 15);
+            const posY = (index % 20) * (screenHeight / 20) + (Math.random() * 20 - 10);
+            const edgeRange = 20;
+            const isEdgeStar = 
+                posX < screenWidth * (edgeRange / 100) || 
+                posX > screenWidth * (1 - edgeRange / 100) || 
+                posY < screenHeight * (edgeRange / 100) || 
+                posY > screenHeight * (1 - edgeRange / 100);
+            if (isEdgeStar) {
+                star.classList.add('flash');
+                star.style.animationDelay = `${Math.random() * 2}s`;
+            }
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.top = `${posY}px`;
+            star.style.left = `${posX}px`;
+            document.getElementById('stars').appendChild(star);
+        }
+
+        const starTotal = 800;    
+        for (let i = 0; i < starTotal; i++) {
+            createStar(i, starTotal);
+        }
+
+        window.addEventListener('resize', () => {
+            document.getElementById('stars').innerHTML = '';
+            for (let i = 0; i < starTotal; i++) {
+                createStar(i, starTotal);
+            }
+        });
+
+        function initTypewriterText() {
+            const textLines = [
+                '祝你生日快乐，一路繁花，万事顺意',
+                '愿你平安喜乐，自在无忧',
+                '愿风吹走所有烦恼，光洒满你的前路',
+                '愿你眼里有星光，心中有热爱'
+            ];
+            const container = document.getElementById('textContainer');
+            container.innerHTML = ''; 
+            
+            let charIndex = 0; 
+            const delayPerChar = 150; 
+            let totalChars = 0;
+            textLines.forEach(line => totalChars += line.length);
+
+            textLines.forEach((line, idx) => {
+                const lineWrapper = document.createElement('div');
+                lineWrapper.className = `text-line line-${idx}`;
+                
+                Array.from(line).forEach(char => {
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'char';
+                    charSpan.textContent = char;
+                    charSpan.style.animationDelay = `${charIndex * delayPerChar}ms`;
+                    lineWrapper.appendChild(charSpan);
+                    charIndex++;
+                });
+                container.appendChild(lineWrapper); 
+            });
+
+            setTimeout(() => {
+                container.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = "生日快乐.html"; 
+                }, 1000);
+
+            }, totalChars * delayPerChar + 1000);
+        }
+
+        window.addEventListener('load', initTypewriterText);
+    </script>
+</body>
+</html>
